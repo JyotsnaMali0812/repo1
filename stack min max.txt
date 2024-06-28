@@ -1,0 +1,48 @@
+import java.util.Stack;
+
+public class Main {
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<>();
+
+        // Pushing integers onto the stack
+        stack.push(10);
+        stack.push(20);
+        stack.push(5);
+        stack.push(30);
+
+        // Display stack contents
+        System.out.println("Stack contents: " + stack);
+
+        // Find and display maximum and minimum values in the stack
+        System.out.println("Maximum value in stack: " + getMax(stack));
+        System.out.println("Minimum value in stack: " + getMin(stack));
+    }
+
+    // Method to find the maximum value in the stack
+    public static int getMax(Stack<Integer> stack) {
+        if (stack.isEmpty()) {
+            return Integer.MIN_VALUE; // Return default value for empty stack
+        }
+        int max = stack.peek();
+        for (int value : stack) {
+            if (value > max) {
+                max = value;
+            }
+        }
+        return max;
+    }
+
+    // Method to find the minimum value in the stack
+    public static int getMin(Stack<Integer> stack) {
+        if (stack.isEmpty()) {
+            return Integer.MAX_VALUE; // Return default value for empty stack
+        }
+        int min = stack.peek();
+        for (int value : stack) {
+            if (value < min) {
+                min = value;
+            }
+        }
+        return min;
+    }
+}
