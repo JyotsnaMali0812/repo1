@@ -1,0 +1,176 @@
+package linkedlist;
+
+class Node {
+    int data;
+    Node next;
+
+    // Constructor to create a new node
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
+
+class LinkedList {
+    Node head; // head of list
+
+    // Method to insert a new node at the front of the list
+    public void insertAtBeginning(int new_data) {
+        Node new_node = new Node(new_data);
+        new_node.next = head;
+        head = new_node;
+    }
+
+    // Method to insert a new node at the end of the list
+    public void insertAtEnd(int new_data) {
+        Node new_node = new Node(new_data);
+        if (head == null) {
+            head = new_node;
+            return;
+        }
+        Node last = head;
+        while (last.next != null) {
+            last = last.next;
+        }
+        last.next = new_node;
+    }
+
+    // Method to insert a new node at a specific position
+    public void insertAtPosition(int new_data, int position) {
+        Node new_node = new Node(new_data);
+        if (position == 0) {
+            insertAtBeginning(new_data);
+            return;
+        }
+        Node current = head;
+        for (int i = 0; current != null && i < position - 1; i++) {
+            current = current.next;
+        }
+        if (current == null) {
+            System.out.println("Position out of bounds");
+            return;
+        }
+        new_node.next = current.next;
+        current.next = new_node;
+    }
+
+    // Method to delete a node by key
+    public void deleteNode(int key) {
+        Node temp = head, prev = null;
+        if (temp != null && temp.data == key) {
+            head = temp.next;
+            return;
+        }
+        while (temp != null && temp.data != key) {
+            prev = temp;
+            temp = temp.next;
+        }
+        if (temp == null) {
+            System.out.println("Key not found");
+            return;
+        }
+        prev.next = temp.next;
+    }
+
+    // Method to delete a node at a specific position
+    public void deleteAtPosition(int position) {
+        if (head == null) {
+            System.out.println("List is empty");
+            return;
+        }
+
+        Node temp = head;
+
+        if (position == 0) {
+            head = temp.next;
+            return;
+        }
+
+        for (int i = 0; temp != null && i < position - 1; i++) {
+            temp = temp.next;
+        }
+
+        if (temp == null || temp.next == null) {
+            System.out.println("Position out of bounds");
+            return;
+        }
+
+        Node next = temp.next.next;
+        temp.next = next;
+    }
+
+    // Method to delete the last node
+    public void deleteAtEnd() {
+        if (head == null) {
+            System.out.println("List is empty");
+            return;
+        }
+
+        if (head.next == null) {
+            head = null;
+            return;
+        }
+
+        Node second_last = head;
+        while (second_last.next.next != null) {
+            second_last = second_last.next;
+        }
+
+        second_last.next = null;
+    }
+
+    // Method to update a node's data by key
+    public void updateNode(int old_data, int new_data) {
+        Node current = head;
+        while (current != null && current.data != old_data) {
+            current = current.next;
+        }
+        if (current != null) {
+            current.data = new_data;
+        } else {
+            System.out.println("Node not found");
+        }
+    }
+
+    // Method to display the linked list
+    public void display() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " -> ");
+            current = current.next;
+        }
+        System.out.println("null");
+    }
+
+    // Main method to run the program
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
+
+        // Insert nodes
+        list.insertAtBeginning(1);
+        list.insertAtEnd(2);
+        list.insertAtPosition(3, 1); // Insert 3 at position 1
+        list.display(); // Display: 1 -> 3 -> 2 -> null
+
+        // Update node
+        list.updateNode(3, 5);
+        list.display(); // Display: 1 -> 5 -> 2 -> null
+
+        // Delete node by key
+        list.deleteNode(1);
+        list.display(); // Display: 5 -> 2 -> null
+
+        // Delete node at position
+        list.deleteAtPosition(1);
+        list.display(); // Display: 5 -> null
+
+        // Insert nodes again for further demonstration
+        list.insertAtEnd(6);
+        list.insertAtEnd(7);
+        list.display(); // Display: 5 -> 6 -> 7 -> null
+
+        // Delete the last node
+        list.deleteAtEnd();
+        list.display(); // Display: 5 -> 6 -> null
+    }
+}
