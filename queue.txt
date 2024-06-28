@@ -1,0 +1,97 @@
+import java.util.Scanner;
+
+public class Queue {
+    int queueLength = 3;
+    int items[] = new int[queueLength];
+    int front = -1;
+    int back = -1;
+
+    boolean isFull() {
+        return back == queueLength - 1;
+    }
+
+    boolean isEmpty() {
+        return front == -1 && back == -1;
+    }
+
+    void enQueue(int itemValue) {
+        if (isFull()) {
+            System.out.println("Queue is full");
+        } else if (isEmpty()) {
+            front = back = 0;
+            items[back] = itemValue;
+        } else {
+            back++;
+            items[back] = itemValue;
+        }
+    }
+
+    void deQueue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty. Nothing to dequeue");
+        } else if (front == back) {
+            front = back = -1;
+        } else {
+            front++;
+        }
+    }
+
+    void display() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+        } else {
+            for (int i = front; i <= back; i++) {
+                System.out.println(items[i]);
+            }
+        }
+    }
+
+    void peak() {
+        if (!isEmpty()) {
+            System.out.println("Front value is: " + items[front]);
+        } else {
+            System.out.println("Queue is empty");
+        }
+    }
+
+    public static void main(String[] args) {
+        Queue myQueue = new Queue();
+        Scanner scanner = new Scanner(System.in);
+        boolean continueLoop = true;
+
+        while (continueLoop) {
+            System.out.println("Choose an operation:");
+            System.out.println("1. Enqueue");
+            System.out.println("2. Dequeue");
+            System.out.println("3. Display");
+            System.out.println("4. Peak");
+            System.out.println("5. Exit");
+
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter an integer to enqueue:");
+                    int value = scanner.nextInt();
+                    myQueue.enQueue(value);
+                    break;
+                case 2:
+                    myQueue.deQueue();
+                    break;
+                case 3:
+                    myQueue.display();
+                    break;
+                case 4:
+                    myQueue.peak();
+                    break;
+                case 5:
+                    continueLoop = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        scanner.close();
+    }
+}
