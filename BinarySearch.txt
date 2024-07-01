@@ -1,0 +1,42 @@
+public class BinarySearch {
+
+    // Binary search without recursion
+    public static int binarySearch(int[] arr, int x) {
+        int left = 0, right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            // Print the low, high, and mid values
+            System.out.println("Low: " + left + ", High: " + right + ", Target: " + mid);
+
+            // Check if x is present at mid
+            if (arr[mid] == x) {
+                return mid; // x found at index mid
+            }
+
+            // If x greater than mid, ignore left half
+            if (arr[mid] < x) {
+                left = mid + 1;
+            }
+            // If x is smaller, ignore right half
+            else {
+                right = mid - 1;
+            }
+        }
+
+        // x was not present
+        return -1;
+    }
+
+    // Main method to test above
+    public static void main(String args[]) {
+        int arr[] = {2, 3, 4, 10, 40};
+        int x = 10; // Element to be searched
+        int result = binarySearch(arr, x);
+
+        if (result == -1)
+            System.out.println("Element not present");
+        else
+            System.out.println("Element found at index " + result);
+    }
+}
