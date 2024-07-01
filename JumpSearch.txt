@@ -1,0 +1,52 @@
+public class JumpSearch {
+    public static int jumpSearch(int[] arr, int x) {
+        int n = arr.length;
+
+        // Finding block size to be jumped
+        int step = (int) Math.floor(Math.sqrt(n));
+        System.out.println("Step size: " + step);
+
+        int prev = 0;
+        while (arr[Math.min(step, n) - 1] < x) {
+            // Print the current block being checked with its high and low elements
+            System.out.println("Checking block with lower index " + prev + " and higher index " + (Math.min(step, n) - 1));
+            System.out.println("Low element: " + arr[prev] + ", High element: " + arr[Math.min(step, n) - 1]);
+
+            prev = step;
+            step += (int) Math.floor(Math.sqrt(n));
+            if (prev >= n)
+                return -1; // Element is not present in the array
+        }
+
+        int low = prev;
+        int high = Math.min(step, n) - 1;
+        System.out.println("Element might be in block with lower index " + low + " and higher index " + high);
+        System.out.println("Low element: " + arr[low] + ", High element: " + arr[high]);
+
+        // Perform a linear search for x in block beginning with prev
+        while (prev <= high && arr[prev] < x) {
+            System.out.println("Linear search checking index " + prev + " with element " + arr[prev]);
+            prev++;
+        }
+
+        // If element is found
+        if (prev <= high && arr[prev] == x)
+            return prev;
+
+        return -1; // Element is not present in the array
+    }
+
+    public static void main(String[] args) {
+        int[] arr = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610 };
+        int x = 55; // Element to search for
+
+        // Find the index of 'x' using Jump Search
+        int index = jumpSearch(arr, x);
+
+        // Print the result
+        if (index != -1)
+            System.out.println("Element " + x + " is at index " + index);
+        else
+            System.out.println("Element " + x + " is not present in the array");
+    }
+}
