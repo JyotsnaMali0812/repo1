@@ -1,0 +1,92 @@
+core java Day4 Assignment
+
+Searching for a Sequence in a Stack
+
+Given a stack and a smaller array representing a sequence, write a function that determines if the sequence is present in the stack. Consider the sequence present if, upon popping the elements, all elements of the array appear consecutively in the stack.
+
+Ans:
+import java.util.Stack;
+
+public class StackSequenceChecker {
+
+    // Function to check if the sequence is present in the stack
+    public static boolean isSequencePresent(Stack<Integer> stack, int[] sequence) {
+        if (stack == null || sequence == null || stack.isEmpty() || sequence.length == 0) {
+            return false;
+        }
+
+        Stack<Integer> tempStack = new Stack<>();
+        boolean isSequenceFound = false;
+
+        // Copy elements to temp stack to preserve original stack
+        tempStack.addAll(stack);
+
+        // Iterate through the elements in the stack to find the sequence
+        while (!tempStack.isEmpty()) {
+            if (tempStack.peek() == sequence[0]) {
+                // Check if the sequence is present
+                isSequenceFound = checkSequence(tempStack, sequence);
+                if (isSequenceFound) {
+                    break;
+                }
+            }
+            tempStack.pop();
+        }
+
+        return isSequenceFound;
+    }
+
+    // Helper function to check if the sequence matches from the current stack position
+    private static boolean checkSequence(Stack<Integer> stack, int[] sequence) {
+        for (int i = 0; i < sequence.length; i++) {
+            if (stack.isEmpty() || stack.pop() != sequence[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(3);
+        stack.push(2);
+        stack.push(5);
+        stack.push(4);
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        stack.push(7);
+
+        int[] sequence1 = {1, 2, 3};
+        int[] sequence2 = {5, 2, 3};
+
+        System.out.println("Is sequence {1, 2, 3} present? " + isSequencePresent(stack, sequence1)); // Should print true
+        System.out.println("Is sequence {5, 2, 3} present? " + isSequencePresent(stack, sequence2)); // Should print false
+    }
+}
+Explanation:
+
+1.isSequencePresent Method:
+
+Takes a stack and a sequence as inputs.
+Uses a temporary stack to preserve the original stack.
+Iterates through the elements in the stack, checking if the first element of the sequence matches the top element of the stack.
+If it matches, calls the checkSequence method to verify if the entire sequence appears consecutively.
+
+2.checkSequence Method:
+
+Takes a stack and a sequence as inputs.
+Pops elements from the stack and compares them with the elements in the sequence.
+Returns true if the entire sequence matches; otherwise, returns false.
+
+3.main Method:
+
+Demonstrates the usage of the isSequencePresent method with example sequences.
+Prints the results of the sequence checks.
+This implementation ensures that the sequence is found consecutively in the stack upon popping elements.
+
+
+
+
+
+
