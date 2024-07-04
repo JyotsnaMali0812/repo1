@@ -1,0 +1,149 @@
+Day2 Core java
+Task 1: Linked List Middle Element Search
+You are given a singly linked list. Write a function to find the middle element without using any extra space and only one traversal through the linked list.
+
+
+class ListNode {
+    int value;
+    ListNode next;
+
+    ListNode(int value) {
+        this.value = value;
+        this.next = null;
+    }
+}
+
+public class LinkedListMiddle {
+    public static ListNode findMiddle(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    // Helper function to create a linked list from an array of values
+    public static ListNode createLinkedList(int[] values) {
+        if (values.length == 0) {
+            return null;
+        }
+
+        ListNode head = new ListNode(values[0]);
+        ListNode current = head;
+
+        for (int i = 1; i < values.length; i++) {
+            current.next = new ListNode(values[i]);
+            current = current.next;
+        }
+
+        return head;
+    }
+
+    // Helper function to print a linked list
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.value + " -> ");
+            current = current.next;
+        }
+        System.out.println("null");
+    }
+
+    public static void main(String[] args) {
+        int[] values = {1, 2, 3, 4, 5};
+        ListNode head = createLinkedList(values);
+        
+        System.out.println("Linked list:");
+        printLinkedList(head);
+
+        ListNode middle = findMiddle(head);
+        System.out.println("Middle element: " + middle.value);
+    }
+}
+
+Task 2: Queue Sorting with Limited Space
+You have a queue of integers that you need to sort. You can only use additional space equivalent to one stack. Describe the steps you would take to sort the elements in the queue.
+
+Steps:
+
+1.Remove the front element from the queue and store it in a temporary variable.
+2.Compare this element with the elements in the stack:
+3.While the stack is not empty and the top of the stack is greater than the temporary element, pop the stack and push the popped element back to the queue.
+4.Push the temporary element onto the stack.
+5.Repeat steps 1-3 until the queue is empty.
+6.Transfer the sorted elements from the stack back to the queue.
+
+Pseudocode:
+
+while queue is not empty:
+    temp = dequeue from queue
+    while stack is not empty and stack.peek() > temp:
+        enqueue(stack.pop()) to queue
+    push temp to stack
+
+while stack is not empty:
+    enqueue(stack.pop()) to queue
+
+Here is a Java implementation of the above logic:
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+public class QueueSorter {
+    public static void sortQueue(Queue<Integer> queue) {
+        Stack<Integer> stack = new Stack<>();
+
+        // Step 1: Sort using stack
+        while (!queue.isEmpty()) {
+            int temp = queue.poll();
+            
+            // Transfer elements from stack to queue until stack top is less than temp
+            while (!stack.isEmpty() && stack.peek() > temp) {
+                queue.add(stack.pop());
+            }
+            
+            // Push temp into stack
+            stack.push(temp);
+        }
+
+        // Step 2: Transfer sorted elements back to queue
+        while (!stack.isEmpty()) {
+            queue.add(stack.pop());
+        }
+    }
+
+    // Helper function to print the queue
+    public static void printQueue(Queue<Integer> queue) {
+        for (Integer element : queue) {
+            System.out.print(element + " ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(4);
+        queue.add(1);
+        queue.add(3);
+        queue.add(2);
+        queue.add(5);
+
+        System.out.println("Original queue:");
+        printQueue(queue);
+
+        sortQueue(queue);
+
+        System.out.println("Sorted queue:");
+        printQueue(queue);
+    }
+}
+
