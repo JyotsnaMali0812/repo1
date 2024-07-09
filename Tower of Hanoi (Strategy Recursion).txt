@@ -1,0 +1,30 @@
+Tower of Hanoi (Strategy: Recursion)
+ 
+It’s a game of Rods and discs in which certain number of discs of different sizes are to be transferred from one rod to other rod.
+It have 3 rods and 3 discs in ascending order( smallest on the top)
+Aim – To move all the discs to the destination rod in the same order.
+---- One disc should be moved at one time.
+---- Larger disc should not be placed on the top of a smaller disc.
+ 
+ 
+package computational;
+public class TowerOfHanoi
+{
+  public static void hanoi(int n , char rodFrom, char rodMiddle, char rodTo) {
+       if (n == 1) {
+ 
+           System.out.println("Disc 1 moved from : "+rodFrom+ " To "+ rodTo);
+           return;
+       }
+        //A to B
+       hanoi(n-1,rodFrom,rodTo,rodMiddle);
+       //A to C
+       System.out.println("Disc "+n+" moved from : "+rodFrom+ " To "+ rodTo);
+       // B to C
+       hanoi(n-1,rodMiddle, rodFrom, rodTo);
+  }
+  public static void main(String args[])
+  {
+hanoi(3,'A','B','C');
+  }
+}
