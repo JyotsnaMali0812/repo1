@@ -1,0 +1,91 @@
+Task 1: Bit Manipulation Basics
+Create a function that counts the number of set bits (1s) in the binary representation of an integer. Extend this to count the total number of set bits in all integers from 1 to n.
+
+Function to Count Set Bits in a Single Integer
+java
+Copy code
+public class BitManipulation {
+
+    // Function to count set bits in a single integer
+    public static int countSetBits(int num) {
+        int count = 0;
+        while (num > 0) {
+            count += (num & 1);
+            num >>= 1;
+        }
+        return count;
+    }
+
+    // Main method to test the function
+    public static void main(String[] args) {
+        int num = 9;
+        System.out.println("Number of set bits in " + num + " is: " + countSetBits(num));
+    }
+}
+Function to Count Total Set Bits from 1 to n
+java
+Copy code
+public class BitManipulation {
+
+    // Function to count set bits in a single integer
+    public static int countSetBits(int num) {
+        int count = 0;
+        while (num > 0) {
+            count += (num & 1);
+            num >>= 1;
+        }
+        return count;
+    }
+
+    // Function to count total set bits from 1 to n
+    public static int countTotalSetBits(int n) {
+        int totalSetBits = 0;
+        for (int i = 1; i <= n; i++) {
+            totalSetBits += countSetBits(i);
+        }
+        return totalSetBits;
+    }
+
+    // Main method to test the function
+    public static void main(String[] args) {
+        int n = 5;
+        System.out.println("Total number of set bits from 1 to " + n + " is: " + countTotalSetBits(n));
+    }
+}
+
+Task 2: Unique Elements Identification
+Given an array of integers where every element appears twice except for two, write a function that efficiently finds these two non-repeating elements using bitwise XOR operations.
+
+public class UniqueElements {
+
+    // Function to find the two non-repeating elements in an array
+    public static int[] findTwoUniqueElements(int[] arr) {
+        // Step 1: XOR all elements to get the XOR of the two unique elements
+        int xor = 0;
+        for (int num : arr) {
+            xor ^= num;
+        }
+
+        // Step 2: Find a set bit in the XOR result (rightmost set bit)
+        int setBit = xor & ~(xor - 1);
+
+        // Step 3: Partition the array elements into two groups and XOR separately
+        int unique1 = 0, unique2 = 0;
+        for (int num : arr) {
+            if ((num & setBit) != 0) {
+                unique1 ^= num;
+            } else {
+                unique2 ^= num;
+            }
+        }
+
+        return new int[]{unique1, unique2};
+    }
+
+    // Main method to test the function
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 2, 1, 4};
+        int[] uniqueElements = findTwoUniqueElements(arr);
+        System.out.println("The two unique elements are: " + uniqueElements[0] + " and " + uniqueElements[1]);
+    }
+}
