@@ -1,0 +1,125 @@
+Day 6
+Task: Circular Queue Binary Search
+Consider a circular queue (implemented using a fixed-size array) where the elements are sorted but have been rotated at an unknown index. Describe an approach to perform a binary search for a given element within this circular queue.
+Ans:
+To perform a binary search on a circular queue where elements are sorted but rotated at an unknown index, you can follow these steps:
+
+Identify the Pivot: The first step is to find the index of the smallest element (pivot), which indicates where the rotation occurred.
+Perform Modified Binary Search: Use the pivot to decide which half of the array to perform the binary search on.
+Here's a detailed approach to achieve this:
+
+Step 1: Find the Pivot
+The pivot is the index of the smallest element in the circular queue. You can find the pivot using a modified binary search:
+
+public static int findPivot(int[] arr) {
+    int low = 0, high = arr.length - 1;
+    while (low < high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] > arr[high]) {
+            // Pivot must be in the right half
+            low = mid + 1;
+        } else {
+            // Pivot must be in the left half
+            high = mid;
+        }
+    }
+    return low; // 'low' should be the index of the smallest element
+}
+Step 2: Perform Binary Search
+Once the pivot is found, use it to decide which half of the array to search in:
+
+public static int binarySearchInCircularQueue(int[] arr, int target) {
+    int pivot = findPivot(arr);
+    int low = 0, high = arr.length - 1;
+
+    // Determine which part to search in
+    if (target >= arr[pivot] && target <= arr[high]) {
+        low = pivot;
+    } else {
+        high = pivot - 1;
+    }
+
+    // Standard binary search
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    return -1; // Target not found
+}
+Example
+Here's a complete example:
+
+public class CircularQueueBinarySearch {
+    public static int findPivot(int[] arr) {
+        int low = 0, high = arr.length - 1;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] > arr[high]) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+    public static int binarySearchInCircularQueue(int[] arr, int target) {
+        int pivot = findPivot(arr);
+        int low = 0, high = arr.length - 1;
+
+        if (target >= arr[pivot] && target <= arr[high]) {
+            low = pivot;
+        } else {
+            high = pivot - 1;
+        }
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (arr[mid] == target) {
+                return mid;
+            } else if (arr[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        return -1; // Target not found
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 15, 20, 0, 5};
+        int target = 15;
+
+        int result = binarySearchInCircularQueue(arr, target);
+        if (result != -1) {
+            System.out.println("Element found at index: " + result);
+        } else {
+            System.out.println("Element not found");
+        }
+    }
+}
+
+Explanation-
+
+findPivot Method:
+
+Uses binary search to find the index of the smallest element, which is the pivot point.
+If the middle element is greater than the last element, the pivot must be in the right half.
+Otherwise, the pivot is in the left half.
+
+binarySearchInCircularQueue Method:
+
+Determines which part of the array to search by comparing the target with the pivot element and the last element.
+Performs a standard binary search in the identified part.
+
+main Method:
+
+Demonstrates the use of binarySearchInCircularQueue by searching for a target element in a rotated sorted array.
