@@ -1,0 +1,237 @@
+Day 7 
+Task 1: Balanced Binary Tree Check
+Write a function to check if a given binary tree is balanced. A balanced tree is one where the height of two subtrees of any node never differs by more than one.
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+public class BalancedBinaryTree {
+    // Helper function that checks the balance of the tree and returns the height
+    private static int checkHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+
+        int leftHeight = checkHeight(node.left);
+        if (leftHeight == -1) return -1; // Left subtree is not balanced
+
+        int rightHeight = checkHeight(node.right);
+        if (rightHeight == -1) return -1; // Right subtree is not balanced
+
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+            return -1; // Current node is not balanced
+        }
+
+        return Math.max(leftHeight, rightHeight) + 1; // Return height of the subtree
+    }
+
+    // Main function to check if the tree is balanced
+    public static boolean isBalanced(TreeNode root) {
+        return checkHeight(root) != -1;
+    }
+
+    public static void main(String[] args) {
+        // Example usage:
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+        root.left.left.left = new TreeNode(6);
+
+        System.out.println(isBalanced(root)); // Output: false, because the tree is not balanced
+    }
+}
+
+Task 2: Trie for Prefix Checking
+Implement a trie data structure in C# that supports insertion of strings and provides a method to check if a given string is a prefix of any word in the trie.
+Ans:
+import java.util.HashMap;
+import java.util.Map;
+
+public class Trie {
+
+    private class TrieNode {
+        Map<Character, TrieNode> children = new HashMap<>();
+        boolean isEndOfWord;
+
+        public TrieNode() {
+            isEndOfWord = false;
+        }
+    }
+
+    private final TrieNode root;
+
+    public Trie() {
+        root = new TrieNode();
+    }
+
+    // Method to insert a word into the trie
+    public void insert(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            current = current.children.computeIfAbsent(ch, c -> new TrieNode());
+        }
+        current.isEndOfWord = true;
+    }
+
+    // Method to check if a given string is a prefix of any word in the trie
+    public boolean isPrefix(String prefix) {
+        TrieNode current = root;
+        for (char ch : prefix.toCharArray()) {
+            TrieNode node = current.children.get(ch);
+            if (node == null) {
+                return false;
+            }
+            current = node;
+        }
+        return true;
+    }
+
+    // Method to check if a word exists in the trie
+    public boolean search(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            TrieNode node = current.children.get(ch);
+            if (node == null) {
+                return false;
+            }
+            current = node;
+        }
+        return current.isEndOfWord;
+    }
+
+    public static void main(String[] args) {
+        Trie trie = new Trie();
+        trie.insert("apple");
+        trie.insert("app");
+        trie.insert("bat");
+        trie.insert("ball");
+
+        System.out.println(trie.isPrefix("app")); // true
+        System.out.println(trie.isPrefix("appl")); // true
+        System.out.println(trie.isPrefix("bat")); // true
+        System.out.println(trie.isPrefix("balloon")); // false
+        System.out.println(trie.isPrefix("cat")); // false
+    }
+}
+
+Task 3: Implementing Heap Operations
+Code a min-heap in C# with methods for insertion, deletion, and fetching the minimum element. Ensure that the heap property is maintained after each operation.
+Ans:
+import java.util.ArrayList;
+import java.util.List;
+
+public class MinHeap {
+
+    private List<Integer> heap;
+
+    public MinHeap() {
+        heap = new ArrayList<>();
+    }
+
+    // Method to get the parent index
+    private int parent(int index) {
+        return (index - 1) / 2;
+    }
+
+    // Method to get the left child index
+    private int leftChild(int index) {
+        return 2 * index + 1;
+    }
+
+    // Method to get the right child index
+    private int rightChild(int index) {
+        return 2 * index + 2;
+    }
+
+    // Method to swap two elements in the heap
+    private void swap(int index1, int index2) {
+        int temp = heap.get(index1);
+        heap.set(index1, heap.get(index2));
+        heap.set(index2, temp);
+    }
+
+    // Method to maintain the heap property after insertion (heapify-up)
+    private void heapifyUp(int index) {
+        while (index > 0 && heap.get(parent(index)) > heap.get(index)) {
+            swap(parent(index), index);
+            index = parent(index);
+        }
+    }
+
+    // Method to maintain the heap property after deletion (heapify-down)
+    private void heapifyDown(int index) {
+        int left = leftChild(index);
+        int right = rightChild(index);
+        int smallest = index;
+
+        if (left < heap.size() && heap.get(left) < heap.get(smallest)) {
+            smallest = left;
+        }
+
+        if (right < heap.size() && heap.get(right) < heap.get(smallest)) {
+            smallest = right;
+        }
+
+        if (smallest != index) {
+            swap(index, smallest);
+            heapifyDown(smallest);
+        }
+    }
+
+    // Method to insert an element into the heap
+    public void insert(int element) {
+        heap.add(element);
+        heapifyUp(heap.size() - 1);
+    }
+
+    // Method to delete the minimum element from the heap
+    public int deleteMin() {
+        if (heap.isEmpty()) {
+            throw new IllegalStateException("Heap is empty");
+        }
+
+        int minElement = heap.get(0);
+        int lastElement = heap.remove(heap.size() - 1);
+
+        if (!heap.isEmpty()) {
+            heap.set(0, lastElement);
+            heapifyDown(0);
+        }
+
+        return minElement;
+    }
+
+    // Method to get the minimum element from the heap
+    public int getMin() {
+        if (heap.isEmpty()) {
+            throw new IllegalStateException("Heap is empty");
+        }
+
+        return heap.get(0);
+    }
+
+    // Main method to demonstrate the functionality of the MinHeap
+    public static void main(String[] args) {
+        MinHeap minHeap = new MinHeap();
+        minHeap.insert(3);
+        minHeap.insert(2);
+        minHeap.insert(15);
+        minHeap.insert(5);
+        minHeap.insert(4);
+        minHeap.insert(45);
+
+        System.out.println("Minimum element: " + minHeap.getMin()); // Should print 2
+
+        System.out.println("Deleted minimum element: " + minHeap.deleteMin()); // Should print 2
+        System.out.println("Minimum element after deletion: " + minHeap.getMin()); // Should print 3
+
+        minHeap.insert(1);
+        System.out.println("Minimum element after inserting 1: " + minHeap.getMin()); // Should print 1
+    }
+}
