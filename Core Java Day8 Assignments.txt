@@ -1,0 +1,136 @@
+Day 8:
+Task 1: Graph Edge Addition Validation
+Given a directed graph, write a function that adds an edge between two nodes and then checks if the graph still has no cycles. If a cycle is created, the edge should not be added.
+Ans:
+class Graph:
+    def __init__(self, vertices):
+        self.graph = {i: [] for i in range(vertices)}
+        self.V = vertices
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+
+    def is_cyclic_util(self, v, visited, rec_stack):
+        # Mark the current node as visited and add to recursion stack
+        visited[v] = True
+        rec_stack[v] = True
+
+        # Recur for all neighbours
+        for neighbour in self.graph[v]:
+            if not visited[neighbour]:
+                if self.is_cyclic_util(neighbour, visited, rec_stack):
+                    return True
+            elif rec_stack[neighbour]:
+                return True
+
+        # Remove the vertex from recursion stack
+        rec_stack[v] = False
+        return False
+
+    def is_cyclic(self):
+        visited = [False] * self.V
+        rec_stack = [False] * self.V
+        for node in range(self.V):
+            if not visited[node]:
+                if self.is_cyclic_util(node, visited, rec_stack):
+                    return True
+        return False
+
+    def add_edge_and_check(self, u, v):
+        # Add the edge
+        self.graph[u].append(v)
+
+        # Check if the graph has a cycle
+        if self.is_cyclic():
+            # If it has a cycle, remove the edge and return False
+            self.graph[u].remove(v)
+            return False
+        return True
+
+# Example usage:
+g = Graph(4)
+g.add_edge(0, 1)
+g.add_edge(1, 2)
+g.add_edge(2, 3)
+
+print(g.add_edge_and_check(3, 0))  # Should return False as it creates a cycle
+print(g.add_edge_and_check(3, 1))  # Should return True as it does not create a cycle
+
+Task 2 : Breadth-First Search (BFS) Implementation
+For a given undirected graph, implement BFS to traverse the graph starting from a given node and print each node in the order it is visited.
+from collections import deque, defaultdict
+
+class Graph:
+    def __init__(self):
+        self.graph = defaultdict(list)
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)  # Since the graph is undirected
+
+    def bfs(self, start_node):
+        visited = set()          # To keep track of visited nodes
+        queue = deque([start_node])  # Queue for BFS
+        visited.add(start_node)
+
+        while queue:
+            node = queue.popleft()
+            print(node, end=' ')
+
+            # Iterate over all adjacent nodes
+            for neighbor in self.graph[node]:
+                if neighbor not in visited:
+                    queue.append(neighbor)
+                    visited.add(neighbor)
+
+# Example usage:
+g = Graph()
+g.add_edge(0, 1)
+g.add_edge(0, 2)
+g.add_edge(1, 2)
+g.add_edge(2, 3)
+g.add_edge(3, 4)
+
+print("BFS starting from node 0:")
+g.bfs(0)  # Output: 0 1 2 3 4
+
+Task 3 : Depth-First Search (DFS) Recursive
+Write a recursive DFS function for a given undirected graph. The function should visit every node and print it out.
+Ans:
+from collections import defaultdict
+
+class Graph:
+    def __init__(self):
+        self.graph = defaultdict(list)
+
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)  # Since the graph is undirected
+
+    def dfs_util(self, node, visited):
+        # Mark the current node as visited and print it
+        visited.add(node)
+        print(node, end=' ')
+
+        # Recur for all the vertices adjacent to this vertex
+        for neighbor in self.graph[node]:
+            if neighbor not in visited:
+                self.dfs_util(neighbor, visited)
+
+    def dfs(self, start_node):
+        visited = set()  # To keep track of visited nodes
+        self.dfs_util(start_node, visited)
+
+# Example usage:
+g = Graph()
+g.add_edge(0, 1)
+g.add_edge(0, 2)
+g.add_edge(1, 2)
+g.add_edge(2, 3)
+g.add_edge(3, 4)
+
+print("DFS starting from node 0:")
+g.dfs(0)  # Output: 0 1 2 3 4
+
+
+
