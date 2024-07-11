@@ -1,0 +1,68 @@
+//Task : Breadth-First Search (BFS) Implementation
+//For a given undirected graph, implement BFS to traverse the graph starting from a given node and print each node in the order it is visited.
+import java.util.*;
+
+public class BFSGraph {
+    private int V; // Number of vertices
+    private LinkedList<Integer> adj[]; // Adjacency List
+
+    // Constructor
+    BFSGraph(int v) {
+        V = v;
+        adj = new LinkedList[v];
+        for (int i = 0; i < v; ++i)
+            adj[i] = new LinkedList();
+    }
+
+    // Method to add an edge to the graph
+    void addEdge(int v, int w) {
+        adj[v].add(w);
+        adj[w].add(v); // Since the graph is undirected
+    }
+
+    // Method to perform BFS traversal starting from a given node
+    void BFS(int s) {
+        // Mark all the vertices as not visited (default is false)
+        boolean visited[] = new boolean[V];
+
+        // Create a queue for BFS
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+
+        // Mark the current node as visited and enqueue it
+        visited[s] = true;
+        queue.add(s);
+
+        while (queue.size() != 0) {
+            // Dequeue a vertex from the queue and print it
+            s = queue.poll();
+            System.out.print(s + " ");
+
+            // Get all adjacent vertices of the dequeued vertex s
+            // If an adjacent vertex has not been visited, mark it visited and enqueue it
+            Iterator<Integer> i = adj[s].listIterator();
+            while (i.hasNext()) {
+                int n = i.next();
+                if (!visited[n]) {
+                    visited[n] = true;
+                    queue.add(n);
+                }
+            }
+        }
+    }
+
+    // Main method to test the BFS implementation
+    public static void main(String args[]) {
+        BFSGraph g = new BFSGraph(6);
+
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 3);
+        g.addEdge(2, 4);
+        g.addEdge(3, 4);
+        g.addEdge(4, 5);
+
+        System.out.println("Breadth First Traversal starting from vertex 0:");
+
+        g.BFS(0);
+    }
+}
