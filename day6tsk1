@@ -1,0 +1,83 @@
+//Task : Graph Edge Addition Validation
+//Given a directed graph, write a function that adds an edge between two nodes and then checks if the graph still has no cycles. If a cycle is created, the edge should not be added.
+import java.util.*;
+
+public class Graph {
+    private final int V; // Number of vertices
+    private final List<List<Integer>> adj; // Adjacency list representation
+
+    public Graph(int V) {
+        this.V = V;
+        adj = new ArrayList<>(V);
+        for (int i = 0; i < V; i++) {
+            adj.add(new LinkedList<>());
+        }
+    }
+
+    // Function to add an edge to the graph
+    public boolean addEdge(int u, int v) {
+        // Add the edge temporarily
+        adj.get(u).add(v);
+
+        // Check for cycle
+        if (isCyclic()) {
+            // Remove the edge if it creates a cycle
+            adj.get(u).remove(Integer.valueOf(v));
+            return false;
+        }
+
+        return true;
+    }
+
+    // Function to check if the graph contains a cycle
+    private boolean isCyclic() {
+        boolean[] visited = new boolean[V];
+        boolean[] recStack = new boolean[V];
+
+        // Check for cycles starting from each vertex
+        for (int i = 0; i < V; i++) {
+            if (isCyclicUtil(i, visited, recStack)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Utility function for cycle detection using DFS
+    private boolean isCyclicUtil(int v, boolean[] visited, boolean[] recStack) {
+        if (recStack[v]) {
+            return true; // Cycle detected
+        }
+
+        if (visited[v]) {
+            return false;
+        }
+
+        visited[v] = true;
+        recStack[v] = true;
+
+        // Recur for all vertices adjacent to this vertex
+        for (Integer neighbor : adj.get(v)) {
+            if (isCyclicUtil(neighbor, visited, recStack)) {
+                return true;
+            }
+        }
+
+        recStack[v] = false;
+        return false;
+    }
+
+    // Main method to test the graph functionality
+    public static void main(String[] args) {
+        Graph graph = new Graph(4);
+
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(1, 2);
+
+        System.out.println("Edge (2 -> 0) added: " + graph.addEdge(2, 0)); // Should print false (cycle created)
+        System.out.println("Edge (2 -> 3) added: " + graph.addEdge(2, 3)); // Should print true (no cycle created)
+        System.out.println("Edge (3 -> 3) added: " + graph.addEdge(3, 3)); // Should print false (cycle created)
+    }
+}
