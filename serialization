@@ -1,0 +1,82 @@
+package Day_15.serealisation;
+
+import java.io.Serializable;
+
+public class Employee implements Serializable {
+
+    private  int id;
+    private String name;
+    private  int age;
+
+    public Employee(int i, String ram, int i1) {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" + "id=" + id + ", name='" + name + '\'' + ", age=" + age + '}';
+    }
+
+}
+
+package Day_15.serealisation;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
+public class SerealisationEx {
+    public static void main(String[] args) throws IOException {
+        Employee emp1=new Employee(111,"ram",21);
+        FileOutputStream fo= new FileOutputStream("C://Users//natha//Desktop//ASSIGNMENT//foleIO//Employee.ser");
+        ObjectOutputStream out=new ObjectOutputStream(fo);
+        out.writeObject(emp1);
+        System.out.println(" Serealization done for the employee  int tha file Employee.ser : ");
+        out.close();
+
+
+
+    }
+}
+
+package Day_15.serealisation;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
+public class DeSerialization {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        FileInputStream fi=new FileInputStream("C://Users//natha//Desktop//ASSIGNMENT//foleIO//Employee.ser");
+        ObjectInputStream oi=new ObjectInputStream(fi);
+        Employee e=(Employee) oi.readObject();
+        System.out.println(" Deserialization Object Value "+ e.getId()+" "+e.getName()+" "+e.getAge());
+
+
+
+    }
+}
