@@ -1,0 +1,19 @@
+
+protobuf-java-3.11.4.jar
+
+mysql-connector-java-8.0.28.jar
+
+
+
+try
+{
+    Connection connection = null;
+    Class.forName("com.mysql.cj.jdbc.Driver");
+    connection = DriverManager.getConnection
+            ("jdbc:mysql://localhost:3306/wipro", "root", "pushpa123");
+    System.out.println("Connected");
+}
+catch(Exception e)
+{
+    System.out.println(e);
+}
