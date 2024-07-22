@@ -1,0 +1,72 @@
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
+
+public class ReflectionExample {
+
+    // A class with private fields, methods, and a constructor
+    private static class ExampleClass {
+        private String privateField = "Initial Value";
+
+        private ExampleClass() {
+            // Private constructor
+        }
+
+        private void privateMethod() {
+            System.out.println("Private method called");
+        }
+
+        public void publicMethod() {
+            System.out.println("Public method called");
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            // Obtain the Class object for ExampleClass
+            Class<?> clazz = ExampleClass.class;
+
+            // Inspecting fields
+            System.out.println("Fields:");
+            for (Field field : clazz.getDeclaredFields()) {
+                System.out.println(" - " + field.getName() + " (Type: " + field.getType() + ")");
+            }
+
+            // Inspecting methods
+            System.out.println("\nMethods:");
+            for (Method method : clazz.getDeclaredMethods()) {
+                System.out.println(" - " + method.getName() + " (Return Type: " + method.getReturnType() + ")");
+            }
+
+            // Inspecting constructors
+            System.out.println("\nConstructors:");
+            for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+                System.out.println(" - " + constructor.getName());
+            }
+
+            // Accessing and modifying a private field
+            ExampleClass instance = new ExampleClass(); // Create an instance to work with
+
+            // Access private field
+            Field privateField = clazz.getDeclaredField("privateField");
+            privateField.setAccessible(true); // Allow access to private field
+
+            // Print original value
+            System.out.println("\nOriginal privateField value: " + privateField.get(instance));
+
+            // Modify the field value
+            privateField.set(instance, "Modified Value");
+
+            // Print modified value
+            System.out.println("Modified privateField value: " + privateField.get(instance));
+
+            // Access and invoke a private method
+            Method privateMethod = clazz.getDeclaredMethod("privateMethod");
+            privateMethod.setAccessible(true); // Allow access to private method
+            privateMethod.invoke(instance); // Invoke private method
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
