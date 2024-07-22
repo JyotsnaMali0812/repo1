@@ -1,0 +1,77 @@
+import java.util.*;
+
+class Job {
+    int Id, Deadline, Profit;
+
+    // Constructor
+    public Job(int id, int deadline, int profit) {
+        this.Id = id;
+        this.Deadline = deadline;
+        this.Profit = profit;
+    }
+
+    // For printing the Job details
+    @Override
+    public String toString() {
+        return "Job ID: " + this.Id + ", Deadline: " + this.Deadline + ", Profit: " + this.Profit;
+    }
+}
+
+public class JobSequencingProblem {
+    
+    // Function to schedule jobs to maximize profit
+    public static List<Job> JobSequencing(List<Job> jobs) {
+        // Sort jobs in descending order of profit
+        Collections.sort(jobs, (a, b) -> b.Profit - a.Profit);
+
+        // Find the maximum deadline to define the size of the sequence array
+        int maxDeadline = jobs.stream().max(Comparator.comparingInt(job -> job.Deadline)).get().Deadline;
+
+        // Array to keep track of free time slots
+        Job[] result = new Job[maxDeadline];
+        boolean[] slot = new boolean[maxDeadline];
+
+        // Initialize all slots as free
+        Arrays.fill(slot, false);
+
+        // Iterate through all jobs
+        for (Job job : jobs) {
+            // Find a free slot for this job (we start from the last possible slot)
+            for (int j = Math.min(maxDeadline, job.Deadline) - 1; j >= 0; j--) {
+                // If the slot is free
+                if (!slot[j]) {
+                    result[j] = job;
+                    slot[j] = true; // Mark this slot as occupied
+                    break;
+                }
+            }
+        }
+
+        // Collect the scheduled jobs
+        List<Job> scheduledJobs = new ArrayList<>();
+        for (Job job : result) {
+            if (job != null) {
+                scheduledJobs.add(job);
+            }
+        }
+
+        return scheduledJobs;
+    }
+
+    public static void main(String[] args) {
+        List<Job> jobs = new ArrayList<>();
+        jobs.add(new Job(1, 2, 100));
+        jobs.add(new Job(2, 1, 19));
+        jobs.add(new Job(3, 2, 27));
+        jobs.add(new Job(4, 1, 25));
+        jobs.add(new Job(5, 3, 15));
+
+        List<Job> result = JobSequencing(jobs);
+        
+        // Print the result
+        System.out.println("Scheduled jobs to maximize profit:");
+        for (Job job : result) {
+            System.out.println(job);
+        }
+    }
+}
