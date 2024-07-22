@@ -1,4 +1,4 @@
-//Task-3-14 import java.lang.reflect.Constructor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -7,36 +7,36 @@ public class ReflectionExample {
     public static void main(String[] args) {
         try {
             // Load the class at runtime
-            Class<?> clazz = Class.forName("SampleClass");
+            Class<?> sampleClassType = Class.forName("com.dsa.day14.ReflectionExample$SampleClass");
 
             // Inspect the class's methods
             System.out.println("Methods:");
-            Method[] methods = clazz.getDeclaredMethods();
+            Method[] methods = sampleClassType.getDeclaredMethods();
             for (Method method : methods) {
                 System.out.println(method);
             }
 
             // Inspect the class's fields
             System.out.println("\nFields:");
-            Field[] fields = clazz.getDeclaredFields();
+            Field[] fields = sampleClassType.getDeclaredFields();
             for (Field field : fields) {
                 System.out.println(field);
             }
 
             // Inspect the class's constructors
             System.out.println("\nConstructors:");
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            Constructor<?>[] constructors = sampleClassType.getDeclaredConstructors();
             for (Constructor<?> constructor : constructors) {
                 System.out.println(constructor);
             }
 
             // Modify the access level of a private field
-            Field privateField = clazz.getDeclaredField("privateField");
+            Field privateField = sampleClassType.getDeclaredField("privateField");
             privateField.setAccessible(true);
 
             // Create an instance of the class
-            Constructor<?> constructor = clazz.getConstructor();
-            Object instance = constructor.newInstance();
+            Constructor<?> sampleClassConstructor = sampleClassType.getDeclaredConstructor(); // Use getDeclaredConstructor()
+            Object instance = sampleClassConstructor.newInstance();
 
             // Set the value of the private field
             privateField.set(instance, "Modified Value");
@@ -45,29 +45,37 @@ public class ReflectionExample {
             String fieldValue = (String) privateField.get(instance);
             System.out.println("\nPrivate field value after modification: " + fieldValue);
 
+        } catch (ClassNotFoundException e) {
+            System.err.println("Class not found: " + e.getMessage());
+        } catch (NoSuchFieldException e) {
+            System.err.println("Field not found: " + e.getMessage());
+        } catch (NoSuchMethodException e) {
+            System.err.println("Method not found: " + e.getMessage());
+        } catch (InstantiationException e) {
+            System.err.println("Instantiation exception: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-}
 
-// Sample class to be inspected
-class SampleClass {
-    private String privateField = "Initial Value";
-    public int publicField;
+    // Sample class to be inspected
+    static class SampleClass {
+        private String privateField = "Initial Value";
+        public int publicField;
 
-    public SampleClass() {
-    }
+        public SampleClass() {
+        }
 
-    public SampleClass(int publicField) {
-        this.publicField = publicField;
-    }
+        public SampleClass(int publicField) {
+            this.publicField = publicField;
+        }
 
-    public void publicMethod() {
-        System.out.println("Public method called");
-    }
+        public void publicMethod() {
+            System.out.println("Public method called");
+        }
 
-    private void privateMethod() {
-        System.out.println("Private method called");
+        private void privateMethod() {
+            System.out.println("Private method called");
+        }
     }
 }
