@@ -1,0 +1,75 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class PrimeNumberCalculator {
+
+    public static void main(String[] args) {
+        int upperLimit = 100000; // Calculate primes up to 100,000
+
+        // Step 1: Use ExecutorService to parallelize the prime number calculation
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        List<Callable<List<Integer>>> tasks = new ArrayList<>();
+
+        int partitionSize = upperLimit / 4;
+        for (int i = 0; i < 4; i++) {
+            int start = i * partitionSize + 1;
+            int end = (i + 1) * partitionSize;
+            tasks.add(() -> calculatePrimesInRange(start, end));
+        }
+
+        List<Integer> primes = new ArrayList<>();
+        try {
+            List<Future<List<Integer>>> results = executorService.invokeAll(tasks);
+
+            for (Future<List<Integer>> result : results) {
+                primes.addAll(result.get());
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+        }
+
+        // Step 2: Use CompletableFuture to write the results to a file asynchronously
+        CompletableFuture<Void> fileWriteFuture = CompletableFuture.runAsync(() -> {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("primes.txt"))) {
+                for (Integer prime : primes) {
+                    writer.write(prime + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Wait for the file writing to complete
+        fileWriteFuture.join();
+        System.out.println("Prime numbers calculation and file writing completed.");
+    }
+
+    private static List<Integer> calculatePrimesInRange(int start, int end) {
+        List<Integer> primes = new ArrayList<>();
+        for (int i = start; i <= end; i++) {
+            if (isPrime(i)) {
+                primes.add(i);
+            }
+        }
+        return primes;
+    }
+
+    private static boolean isPrime(int number) {
+        if (number <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) return false;
+        }
+        return true;
+    }
+}
