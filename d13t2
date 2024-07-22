@@ -1,0 +1,59 @@
+public class ThreadLifecycleExample {
+
+    public static void main(String[] args) throws InterruptedException {
+        // Create a thread
+        Thread thread = new Thread(new ThreadLifecycleTask());
+
+        // NEW state
+        System.out.println("Thread state after creation: " + thread.getState()); // NEW
+
+        // Start the thread
+        thread.start();
+
+        // Wait for the thread to finish
+        thread.join();
+
+        // The thread is now TERMINATED
+        System.out.println("Thread state after completion: " + thread.getState()); // TERMINATED
+    }
+}
+
+class ThreadLifecycleTask implements Runnable {
+    private final Object lock = new Object();
+
+    @Override
+    public void run() {
+        try {
+            // RUNNABLE state
+            System.out.println("Thread state inside run(): " + Thread.currentThread().getState()); // RUNNABLE
+
+            // Demonstrate TIMED_WAITING
+            System.out.println("Thread entering TIMED_WAITING state.");
+            Thread.sleep(3000); // 3 seconds
+            System.out.println("Thread state after sleep(): " + Thread.currentThread().getState()); // RUNNABLE
+
+            // Demonstrate WAITING
+            synchronized (lock) {
+                System.out.println("Thread entering WAITING state.");
+                lock.wait(); // Wait indefinitely
+                System.out.println("Thread state after wait(): " + Thread.currentThread().getState()); // RUNNABLE
+            }
+
+            // Notify the waiting thread (demonstrating WAITING and NOTIFY)
+            synchronized (lock) {
+                lock.notify();
+            }
+
+            // Demonstrate BLOCKED
+            System.out.println("Thread entering BLOCKED state.");
+            synchronized (lock) {
+                // Simulate block while holding a lock
+                Thread.sleep(2000); // 2 seconds
+                System.out.println("Thread state after sleep(): " + Thread.currentThread().getState()); // RUNNABLE
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
