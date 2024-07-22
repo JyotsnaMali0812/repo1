@@ -1,0 +1,75 @@
+import java.util.function.Predicate;
+import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+// Define the Person class
+class Person {
+    private String name;
+    private int age;
+
+    // Constructor
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getters
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    // Override toString() for easy printing
+    @Override
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}
+
+public class FunctionalInterfacesExample {
+    
+    // Method using Predicate, Function, Consumer, and Supplier
+    public static void operateOnPerson(
+        Person person,
+        Predicate<Person> predicate,
+        Function<Person, String> function,
+        Consumer<Person> consumer,
+        Supplier<String> supplier
+    ) {
+        // Test the predicate
+        if (predicate.test(person)) {
+            System.out.println("Predicate test passed for: " + person);
+        } else {
+            System.out.println("Predicate test failed for: " + person);
+        }
+
+        // Apply the function and print the result
+        String result = function.apply(person);
+        System.out.println("Function result: " + result);
+
+        // Apply the consumer
+        consumer.accept(person);
+
+        // Get a result from the supplier
+        String supplierResult = supplier.get();
+        System.out.println("Supplier result: " + supplierResult);
+    }
+
+    public static void main(String[] args) {
+        // Create a Person object
+        Person person = new Person("Alice", 30);
+
+        // Define Predicate, Function, Consumer, and Supplier
+        Predicate<Person> isAdult = p -> p.getAge() >= 18;
+        Function<Person, String> getNameUpperCase = p -> p.getName().toUpperCase();
+        Consumer<Person> printPerson = p -> System.out.println("Person: " + p);
+        Supplier<String> getGreeting = () -> "Hello, World!";
+
+        // Call the method with these functional interfaces
+        operateOnPerson(person, isAdult, getNameUpperCase, printPerson, getGreeting);
+    }
+}
