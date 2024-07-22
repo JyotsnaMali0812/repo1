@@ -1,0 +1,76 @@
+public class KnightsTour {
+    private static final int N = 8;
+
+    // Utility function to check if (x, y) is valid chessboard coordinates
+    // Note: this function also serves to check if the cell has already been visited
+    private static boolean isSafe(int x, int y, int[][] board) {
+        return (x >= 0 && x < N && y >= 0 && y < N && board[x][y] == -1);
+    }
+
+    // Utility function to print the chessboard
+    private static void printSolution(int[][] board) {
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < N; y++) {
+                System.out.print(board[x][y] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    // Function to solve Knight's Tour problem using Backtracking
+    public static boolean solveKnightsTour() {
+        int[][] board = new int[N][N];
+
+        // Initialization of the chessboard
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < N; y++) {
+                board[x][y] = -1;
+            }
+        }
+
+        // xMove[] and yMove[] define the next move of the Knight.
+        // xMove[] is for next value of x coordinate
+        // yMove[] is for next value of y coordinate
+        int[] xMove = {2, 1, -1, -2, -2, -1, 1, 2};
+        int[] yMove = {1, 2, 2, 1, -1, -2, -2, -1};
+
+        // Since the Knight is initially at the first block
+        board[0][0] = 0;
+
+        // Start from 0,0 and explore all tours using solveKTUtil()
+        if (!solveKTUtil(0, 0, 1, board, xMove, yMove)) {
+            System.out.println("Solution does not exist");
+            return false;
+        } else {
+            printSolution(board);
+        }
+
+        return true;
+    }
+
+    // A recursive utility function to solve Knight Tour problem
+    private static boolean solveKTUtil(int x, int y, int movei, int[][] board, int[] xMove, int[] yMove) {
+        int k, nextX, nextY;
+        if (movei == N * N)
+            return true;
+
+        // Try all next moves from the current coordinate x, y
+        for (k = 0; k < 8; k++) {
+            nextX = x + xMove[k];
+            nextY = y + yMove[k];
+            if (isSafe(nextX, nextY, board)) {
+                board[nextX][nextY] = movei;
+                if (solveKTUtil(nextX, nextY, movei + 1, board, xMove, yMove))
+                    return true;
+                else
+                    board[nextX][nextY] = -1; // backtracking
+            }
+        }
+
+        return false;
+    }
+
+    public static void main(String[] args) {
+        solveKnightsTour();
+    }
+}
