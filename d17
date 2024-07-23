@@ -1,0 +1,53 @@
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+
+public class CalculatorTest {
+
+    private static Calculator calculator;
+    
+    // This method runs once before any test methods are executed
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        System.out.println("BeforeClass: Initializing resources");
+        calculator = new Calculator(); // Expensive setup
+    }
+    
+    // This method runs once after all test methods have been executed
+    @AfterClass
+    public static void tearDownAfterClass() {
+        System.out.println("AfterClass: Cleaning up resources");
+        calculator = null; // Cleanup
+    }
+
+    // This method runs before each test method
+    @Before
+    public void setUp() {
+        System.out.println("Before: Setting up test");
+        // You can set up test-specific resources here
+    }
+
+    // This method runs after each test method
+    @After
+    public void tearDown() {
+        System.out.println("After: Tearing down test");
+        // You can clean up test-specific resources here
+    }
+
+    @Test
+    public void testAddition() {
+        System.out.println("Running testAddition");
+        int result = calculator.add(1, 2);
+        assertEquals(3, result);
+    }
+
+    @Test
+    public void testSubtraction() {
+        System.out.println("Running testSubtraction");
+        int result = calculator.subtract(5, 3);
+        assertEquals(2, result);
+    }
+}
