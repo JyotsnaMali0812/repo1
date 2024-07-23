@@ -1,0 +1,39 @@
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
+public class TimezoneConverter {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        // Read the input time from the user
+        System.out.println("Enter the date and time (yyyy-MM-dd HH:mm): ");
+        String dateTimeInput = scanner.nextLine();
+        LocalDateTime localDateTime = LocalDateTime.parse(dateTimeInput, formatter);
+
+        // Read the source timezone from the user
+        System.out.println("Enter the source timezone (e.g., America/New_York): ");
+        String sourceTimeZoneInput = scanner.nextLine();
+        ZoneId sourceZoneId = ZoneId.of(sourceTimeZoneInput);
+
+        // Read the target timezone from the user
+        System.out.println("Enter the target timezone (e.g., Europe/London): ");
+        String targetTimeZoneInput = scanner.nextLine();
+        ZoneId targetZoneId = ZoneId.of(targetTimeZoneInput);
+
+        // Convert the time to the source timezone
+        ZonedDateTime sourceZonedDateTime = localDateTime.atZone(sourceZoneId);
+
+        // Convert the time to the target timezone
+        ZonedDateTime targetZonedDateTime = sourceZonedDateTime.withZoneSameInstant(targetZoneId);
+
+        // Print the result
+        System.out.println("Time in " + targetZoneId + ": " + targetZonedDateTime.format(formatter));
+        
+        scanner.close();
+    }
+}
