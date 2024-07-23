@@ -1,0 +1,25 @@
+import java.io.*;
+import java.net.Socket;
+
+public class TCPClient {
+    public static void main(String[] args) {
+        String hostname = "localhost";
+        int port = 12345;
+
+        try (Socket socket = new Socket(hostname, port)) {
+            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+
+            // Create a request with two numbers and an operation
+            OperationRequest request = new OperationRequest(2, 2, "+");
+            output.writeObject(request);
+
+            // Read the response from the server
+            int result = (int) input.readObject();
+            System.out.println("Result: " + result);
+
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
