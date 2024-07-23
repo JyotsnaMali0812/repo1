@@ -51,3 +51,19 @@ public class CalculatorTest {
         assertEquals(2, result);
     }
 }
+
+
+public class Calculator {
+
+    // Method to add two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Method to subtract one integer from another
+    public int subtract(int a, int b) {
+        return a - b;
+    }
+
+    // You can add more methods if needed, such as multiplication and division
+}
