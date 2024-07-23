@@ -1,0 +1,61 @@
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class TCPServer {
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(12345)) {
+            System.out.println("Server is listening on port 12345");
+            
+            while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("New client connected");
+                
+                new ServerThread(socket).start();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
+class ServerThread extends Thread {
+    private Socket socket;
+
+    public ServerThread(Socket socket) {
+        this.socket = socket;
+    }
+
+    public void run() {
+        try (
+            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+        ) {
+            OperationRequest request = (OperationRequest) input.readObject();
+            int result = performOperation(request);
+
+            output.writeObject(result);
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private int performOperation(OperationRequest request) {
+        int number1 = request.getNumber1();
+        int number2 = request.getNumber2();
+        String operation = request.getOperation();
+
+        switch (operation) {
+            case "+":
+                return number1 + number2;
+            case "-":
+                return number1 - number2;
+            case "*":
+                return number1 * number2;
+            case "/":
+                return number2 != 0 ? number1 / number2 : 0;
+            default:
+                throw new IllegalArgumentException("Invalid operation: " + operation);
+        }
+    }
+}
