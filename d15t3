@@ -1,0 +1,43 @@
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
+public class NIOExample {
+    public static void main(String[] args) {
+        String inputFilePath = "resources/input.txt";
+        String outputFilePath = "resources/output.txt";
+
+        // Reading from the input file
+        try (FileChannel inputFileChannel = FileChannel.open(Paths.get(inputFilePath), StandardOpenOption.READ)) {
+            ByteBuffer buffer = ByteBuffer.allocate(1024); // Create a buffer with capacity of 1024 bytes
+            StringBuilder fileContent = new StringBuilder();
+
+            while (inputFileChannel.read(buffer) > 0) {
+                buffer.flip(); // Switch buffer from writing mode to reading mode
+                while (buffer.hasRemaining()) {
+                    fileContent.append((char) buffer.get());
+                }
+                buffer.clear(); // Clear the buffer for the next read
+            }
+
+            System.out.println("File Content:\n" + fileContent);
+
+            // Writing to the output file
+            try (FileChannel outputFileChannel = FileChannel.open(Paths.get(outputFilePath), StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
+                buffer.clear(); // Clear buffer before writing
+                buffer.put(fileContent.toString().getBytes());
+                buffer.flip(); // Switch buffer from writing mode to reading mode
+
+                while (buffer.hasRemaining()) {
+                    outputFileChannel.write(buffer);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
