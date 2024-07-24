@@ -1,0 +1,18 @@
+package com.example;
+
+public class TestSingleton {
+
+    public static void main(String[] args) {
+        // Get the single instance of DatabaseConnectionManager
+        DatabaseConnectionManager manager = DatabaseConnectionManager.getInstance();
+
+        // Use the instance to get a database connection
+        if (manager.getConnection() != null) {
+            System.out.println("Connection successful!");
+            // Perform database operations here
+        }
+
+        // Disconnect from the database
+        manager.disconnect();
+    }
+}
