@@ -1,0 +1,18 @@
+public class Main {
+    public static void main(String[] args) {
+        // Get the singleton instance
+        DatabaseConnectionManager manager1 = DatabaseConnectionManager.getInstance();
+        DatabaseConnectionManager manager2 = DatabaseConnectionManager.getInstance();
+
+        // Print the connections
+        System.out.println("Connection 1: " + manager1.getConnection());
+        System.out.println("Connection 2: " + manager2.getConnection());
+
+        // Verify that both instances are the same
+        if (manager1 == manager2) {
+            System.out.println("Both instances are the same. Singleton pattern works.");
+        } else {
+            System.out.println("Instances are different. Singleton pattern failed.");
+        }
+    }
+}
