@@ -1,0 +1,19 @@
+[9:06 AM] Madabattula Rani
+package bdp;
+public class Product
+{
+    private String pCode;
+    private double pPrice;
+    public Product(String pCode, double pPrice) {
+        this.pCode = pCode;
+        this.pPrice = pPr
+ice;
+    }
+    public String getpCode() {
+        return pCode;
+    }
+    public double getpPrice() {
+        return pPrice;
+    }
+}
+ 
