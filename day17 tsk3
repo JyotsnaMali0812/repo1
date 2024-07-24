@@ -1,0 +1,54 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class StringUtilsTest {
+
+    @Test
+    public void testReverse() {
+        assertEquals("dcba", StringUtils.reverse("abcd"));
+        assertEquals("4321", StringUtils.reverse("1234"));
+        assertEquals("", StringUtils.reverse(""));
+        assertEquals(null, StringUtils.reverse(null));
+    }
+
+    @Test
+    public void testIsPalindrome() {
+        assertTrue(StringUtils.isPalindrome("madam"));
+        assertTrue(StringUtils.isPalindrome("RaceCar"));
+        assertFalse(StringUtils.isPalindrome("hello"));
+        assertFalse(StringUtils.isPalindrome(null));
+    }
+
+    @Test
+    public void testToUpperCase() {
+        assertEquals("HELLO", StringUtils.toUpperCase("hello"));
+        assertEquals("JAVA", StringUtils.toUpperCase("java"));
+        assertEquals("", StringUtils.toUpperCase(""));
+        assertEquals(null, StringUtils.toUpperCase(null));
+    }
+}
+
+public class StringUtils {
+
+    public static String reverse(String input) {
+        if (input == null) {
+            return null;
+        }
+        return new StringBuilder(input).reverse().toString();
+    }
+
+    public static boolean isPalindrome(String input) {
+        if (input == null) {
+            return false;
+        }
+        String reversed = reverse(input);
+        return input.equalsIgnoreCase(reversed);
+    }
+
+    public static String toUpperCase(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.toUpperCase();
+    }
+}
