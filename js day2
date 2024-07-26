@@ -1,0 +1,85 @@
+function toCelsius(fahrenheit){
+    return (5/9)*(fahrenheit-32);
+
+}
+let v = prompt("Enter the fahrenheit value");
+let value = toCelsius(v);
+console.log(value);
+document.write(value);
+
+function changeText()
+{
+document.getElementById("demo").innerHTML="Welcome to JS";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>My First WebPage</h1>
+    <p>First paragraph</p>
+    <script src="function.js">
+document.getElementById("demo");
+</script>
+<button onclick = "changeText()">Click me</button>
+   <p id="demo">JavaScript</p>
+</body>
+</html>
+
+class student{
+    constructor(name,age){
+        this.name=name;
+        this.age=age;
+    }
+    display(){
+        console.log(this.name);
+        console.log(this.age);
+        document.write(this.name+ "<br>"+this.age+"<br>");
+    }
+
+}
+const s1= new student("hitesh",22);
+const s2= new student("jay",33);
+s1.display();
+s2.display();
+
+
+
+class student{
+    constructor(name,age){
+        this.name=name;
+        this.age=age;
+    }
+    display(){
+        console.log(this.name);
+        console.log(this.age);
+        document.write(this.name+ "<br>"+this.age+"<br>");
+    }
+
+}
+const s1= new student("hitesh",22);
+const s2= new student("jay",33);
+s1.display();
+s2.display();
+
+
+class student{
+    constructor(name,age){
+        this.name=name;
+        this.age=age;
+    }
+    display(){
+        console.log(this.name);
+        console.log(this.age);
+        document.write(this.name+ "<br>"+this.age+"<br>");
+    }
+
+}
+const s1= new student("ram",22);
+const s2= new student("pari",33);
+s1.display();
+s2.display();
